@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign Up eBank</title>
+</head>
+<body>
+    <main>
+        <h1>Banking App</h1>
+        <h2>Sign Up</h2>
+
+        <form id="signupForm">
+            <div>
+                <label for="name">Name</label>
+                <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    required
+                >
+            </div>
+
+            <div>
+                <label for="email">Email</label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    required
+                >
+            </div>
+
+            <div>
+                <label for="password">Password</label>
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    required
+                >
+            </div>
+
+            <button type="submit">Create Account</button>
+        </form>
+
+        <p>
+            Already have an account?
+            <a href="/login.html">Log in</a>
+        </p>
+    </main>
+
+    <script>
+        const signupForm = document.getElementById("signupForm");
+
+        signupForm.addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            const signupData = {
+                name: document.getElementById("name").value,
+                email: document.getElementById("email").value,
+                password: document.getElementById("password").value
+            };
+
+            try {
+                const response = await fetch("/api/auth/signup", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(signupData)
+                });
+
+                signupForm.reset();
+
+                if (response.ok) {
+                    window.location.href = "/index.html";
+                } else if (response.status === 409) {
+                    window.location.href = "/already.html";
+                } else {
+                    alert("Something went wrong. Please try again.");
+                }
+            } catch (error) {
+                signupForm.reset();
+                alert("Something went wrong. Please try again.");
+            }
+        });
+    </script>
+</body>
+</html>
